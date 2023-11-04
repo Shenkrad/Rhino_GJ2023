@@ -2,6 +2,7 @@
 
 
 #include "Rhino_Fruit.h"
+#include "Rhino_GJ2023/Rhino_GJ2023GameMode.h"
 
 // Sets default values
 ARhino_Fruit::ARhino_Fruit()
@@ -33,4 +34,17 @@ void ARhino_Fruit::SpawnFruit()
 void ARhino_Fruit::DeSpawnFruit()
 {
 	DeSpawnPickable();
+}
+
+void ARhino_Fruit::CollectFruit()
+{
+	CollectPickable();
+
+	if (GetWorld())
+	{
+		if (ARhino_GJ2023GameMode* GameMode = Cast<ARhino_GJ2023GameMode>(GetWorld()->GetAuthGameMode()))
+		{
+			GameMode->RequestFruitRespawn(this);
+		}
+	}
 }

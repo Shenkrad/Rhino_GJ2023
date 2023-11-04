@@ -137,3 +137,52 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 		}
 	}
 }
+
+void ARhino_GJ2023GameMode::RequestFruitRespawn(ARhino_Fruit* CollectedFruit)
+{
+	FTimerHandle TimerHandle;
+	FTimerDelegate Delegate;
+	Delegate.BindUFunction(this, "FruitRespawn", CollectedFruit);
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, FruitTimeToRespawn, false);
+}
+
+void ARhino_GJ2023GameMode::FruitRespawn(ARhino_Fruit* CollectedFruit)
+{
+	//Check if CurrentNum - Collected fruit allows for another Fruit
+	if (ActiveFruits.Num() - 1 >= NumberFruits)
+	{
+		return;
+	}
+	if (InactiveFruits.Find(CollectedFruit) > INDEX_NONE)
+	{
+		return;
+	}
+
+	int32 Seed = FMath::RandRange(0, InactiveFruits.Num() - 1);
+	if (InactiveFruits.IsValidIndex(Seed) && InactiveFruits[Seed] != nullptr)
+	{
+
+		InactiveFruits[Seed]->SpawnFruit();
+		ActiveFruits.Add(InactiveFruits[Seed]);
+		InactiveFruits.RemoveAt(Seed);
+
+		ActiveFruits.Remove(CollectedFruit);
+		InactiveFruits.Add(CollectedFruit);
+	}
+}
+
+void ARhino_GJ2023GameMode::RequestWallDestroy(ARhino_BreakableWall* DestroyedWall)
+{
+	WallDestroy(DestroyedWall);
+}
+
+void ARhino_GJ2023GameMode::WallDestroy(ARhino_BreakableWall* DestroyedWall)
+{
+	if (InactiveBreakableWalls.Find(DestroyedWall) > INDEX_NONE)
+	{
+		return;
+	}
+	ActiveBreakableWalls.Remove(DestroyedWall);
+	InactiveBreakableWalls.Add(DestroyedWall);
+}

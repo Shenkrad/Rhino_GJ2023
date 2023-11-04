@@ -2,7 +2,7 @@
 
 
 #include "Rhino_Pickable.h"
-#include "Rhino_GJ2023/Rhino_GJ2023GameMode.h"
+
 
 // Sets default values
 ARhino_Pickable::ARhino_Pickable()

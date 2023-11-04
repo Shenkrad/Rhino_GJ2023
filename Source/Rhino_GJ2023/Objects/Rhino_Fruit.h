@@ -24,8 +24,12 @@ protected:
 
 public:	
 
+	UFUNCTION()
 	void SpawnFruit();
+	UFUNCTION()
 	void DeSpawnFruit();
+	UFUNCTION(BlueprintCallable)
+	void CollectFruit();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

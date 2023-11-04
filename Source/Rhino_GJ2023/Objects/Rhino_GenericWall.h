@@ -30,7 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void DeSpawnWall();
 	UFUNCTION(BlueprintCallable)
-	void DestroyWall();
+	virtual void DestroyWall();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -26,11 +26,17 @@ public:
 		int32 NumberBreakableWalls = 5;
 	UPROPERTY(EditAnywhere, Category = "MazeSpawn Options")
 		int32 NumberFruits = 5;
+	UPROPERTY(EditAnywhere, Category = "Fruits Options")
+		float FruitTimeToRespawn = 2.5f;
 
 	UFUNCTION(BlueprintCallable)
-	void ScanAllObjects();
+		void ScanAllObjects();
 	UFUNCTION(BlueprintCallable)
-	void RandomSpawnObjects();
+		void RandomSpawnObjects();
+	UFUNCTION()
+		void RequestFruitRespawn(ARhino_Fruit* CollectedFruit); 
+	UFUNCTION()
+		void RequestWallDestroy(ARhino_BreakableWall* DestroyedWall);
 
 
 protected:
@@ -47,8 +53,15 @@ protected:
 	TArray<ARhino_BreakableWall*> InactiveBreakableWalls;
 	UPROPERTY()
 	TArray<ARhino_Fruit*> InactiveFruits;
-	//TArray<ARhino_SolidWall*> Fruits;
+
+
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void FruitRespawn(ARhino_Fruit* CollectedFruit);
+
+	UFUNCTION()
+		void WallDestroy(ARhino_BreakableWall* DestroyedWall);
 
 };
 
