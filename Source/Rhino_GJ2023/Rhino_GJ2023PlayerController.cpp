@@ -44,11 +44,8 @@ void ARhino_GJ2023PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &ARhino_GJ2023PlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &ARhino_GJ2023PlayerController::OnSetDestinationReleased);
 
-		// Setup touch input events
-		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Started, this, &ARhino_GJ2023PlayerController::OnInputStarted);
-		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &ARhino_GJ2023PlayerController::OnTouchTriggered);
-		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ARhino_GJ2023PlayerController::OnTouchReleased);
-		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ARhino_GJ2023PlayerController::OnTouchReleased);
+		//Setup dash event
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ARhino_GJ2023PlayerController::OnDashTriggered);
 	}
 }
 
@@ -66,14 +63,7 @@ void ARhino_GJ2023PlayerController::OnSetDestinationTriggered()
 	// We look for the location in the world where the player has pressed the input
 	FHitResult Hit;
 	bool bHitSuccessful = false;
-	if (bIsTouch)
-	{
-		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
-	}
-	else
-	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-	}
+	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
 
 	// If we hit a surface, cache the location
 	if (bHitSuccessful)
@@ -103,15 +93,11 @@ void ARhino_GJ2023PlayerController::OnSetDestinationReleased()
 	FollowTime = 0.f;
 }
 
-// Triggered every frame when the input is held down
-void ARhino_GJ2023PlayerController::OnTouchTriggered()
+void ARhino_GJ2023PlayerController::OnDashTriggered()
 {
-	bIsTouch = true;
-	OnSetDestinationTriggered();
-}
+	ACharacter* ControlledCharacter = GetCharacter();
+	FVector CharacterDirection = ControlledCharacter->GetActorForwardVector();
+	FVector LaunchVelocity = CharacterDirection * DashLaunchVelocity;
 
-void ARhino_GJ2023PlayerController::OnTouchReleased()
-{
-	bIsTouch = false;
-	OnSetDestinationReleased();
+	ControlledCharacter->LaunchCharacter(LaunchVelocity, false, false);
 }

@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Rhino_GJ2023Character.generated.h"
 
+class UBoxComponent;
+
 UCLASS(Blueprintable)
 class ARhino_GJ2023Character : public ACharacter
 {
@@ -13,6 +15,8 @@ class ARhino_GJ2023Character : public ACharacter
 
 public:
 	ARhino_GJ2023Character();
+
+	virtual void BeginPlay();
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
@@ -30,5 +34,13 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
+
+	/* Box componet to check dash collision */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* BoxCollisionComponent;
+
+	UFUNCTION()
+	void OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+			int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 };
 
