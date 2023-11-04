@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "Rhino_GJ2023Character.h"
+
 ARhino_GJ2023PlayerController::ARhino_GJ2023PlayerController()
 {
 	bShowMouseCursor = true;
@@ -28,6 +30,8 @@ void ARhino_GJ2023PlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
+
+	ControlledCharacter = Cast<ARhino_GJ2023Character>(GetCharacter());
 }
 
 void ARhino_GJ2023PlayerController::SetupInputComponent()
@@ -95,9 +99,21 @@ void ARhino_GJ2023PlayerController::OnSetDestinationReleased()
 
 void ARhino_GJ2023PlayerController::OnDashTriggered()
 {
-	ACharacter* ControlledCharacter = GetCharacter();
+	if (ControlledCharacter == nullptr) return;
+
 	FVector CharacterDirection = ControlledCharacter->GetActorForwardVector();
 	FVector LaunchVelocity = CharacterDirection * DashLaunchVelocity;
 
+	ControlledCharacter->SetIsDashing(true);
 	ControlledCharacter->LaunchCharacter(LaunchVelocity, false, false);
+
+	GetWorldTimerManager().SetTimer(DashTimerHandle, this, &ARhino_GJ2023PlayerController::OnStopDashing, DashWindow, false);
+	
+}
+
+void ARhino_GJ2023PlayerController::OnStopDashing()
+{	
+	if (ControlledCharacter == nullptr) return;
+
+	ControlledCharacter->SetIsDashing(false);
 }

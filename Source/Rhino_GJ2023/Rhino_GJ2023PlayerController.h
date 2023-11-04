@@ -10,6 +10,7 @@
 
 /** Forward declaration to improve compiling times */
 class UNiagaraSystem;
+class ARhino_GJ2023Character;
 
 UCLASS()
 class ARhino_GJ2023PlayerController : public APlayerController
@@ -41,6 +42,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement Settings", meta=(AllowPrivateAccess = "true"))
 	float DashLaunchVelocity = 3000.f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement Settings", meta=(AllowPrivateAccess = "true"))
+	float DashWindow = 1.f;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -59,8 +62,16 @@ protected:
 
 private:
 	FVector CachedDestination;
+	
+	FTimerHandle DashTimerHandle;
 
 	float FollowTime; // For how long it has been pressed
+
+	UPROPERTY()
+	ARhino_GJ2023Character* ControlledCharacter;
+
+	UFUNCTION()
+	void OnStopDashing();
 };
 
 

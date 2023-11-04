@@ -12,6 +12,8 @@
 #include "Materials/Material.h"
 #include "Engine/World.h"
 
+#include "Objects/Rhino_BreakableWall.h"
+
 ARhino_GJ2023Character::ARhino_GJ2023Character()
 {
 	// Set size for player capsule
@@ -52,6 +54,8 @@ ARhino_GJ2023Character::ARhino_GJ2023Character()
 void ARhino_GJ2023Character::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Binding collision
 	BoxCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ARhino_GJ2023Character::OnBoxCollisionBeginOverlap);
 }
 
@@ -63,5 +67,15 @@ void ARhino_GJ2023Character::Tick(float DeltaSeconds)
 void ARhino_GJ2023Character:: OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 			int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Component Overlap"));
+	ARhino_BreakableWall* BreakableWall = Cast<ARhino_BreakableWall>(OtherActor);
+	
+	if (BreakableWall != nullptr && bIsDashing)
+	{
+		BreakableWall->DeSpawnWall();
+	}
+}
+
+void ARhino_GJ2023Character::SetIsDashing(bool IsDashing)
+{
+	bIsDashing = IsDashing;
 }
