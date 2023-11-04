@@ -13,6 +13,7 @@
 #include "Engine/World.h"
 
 #include "Objects/Rhino_BreakableWall.h"
+#include "Objects/Rhino_Fruit.h"
 
 ARhino_GJ2023Character::ARhino_GJ2023Character()
 {
@@ -71,7 +72,14 @@ void ARhino_GJ2023Character:: OnBoxCollisionBeginOverlap(UPrimitiveComponent* Ov
 	
 	if (BreakableWall != nullptr && bIsDashing)
 	{
-		BreakableWall->DeSpawnWall();
+		BreakableWall->DestroyWall();
+	}
+
+	ARhino_Fruit* Fruit = Cast<ARhino_Fruit>(OtherActor);
+
+	if (Fruit != nullptr)
+	{
+		Fruit->CollectFruit();
 	}
 }
 

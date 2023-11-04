@@ -55,6 +55,6 @@ void ARhino_Pickable::DeSpawnPickable()
 
 void ARhino_Pickable::CollectPickable()
 {
-	DeSpawnPickable();
+	
 }
 

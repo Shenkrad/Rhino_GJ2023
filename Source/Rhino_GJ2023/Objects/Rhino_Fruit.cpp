@@ -38,7 +38,7 @@ void ARhino_Fruit::DeSpawnFruit()
 
 void ARhino_Fruit::CollectFruit()
 {
-	CollectPickable();
+	DeSpawnPickable();
 
 	if (GetWorld())
 	{

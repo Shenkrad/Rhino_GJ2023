@@ -101,10 +101,10 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 			break;
 
 		int32 Seed = FMath::RandRange(0, InactiveSolidWalls.Num() - 1);
-		if (InactiveSolidWalls.IsValidIndex(i) && InactiveSolidWalls[i] != nullptr)
+		if (InactiveSolidWalls.IsValidIndex(Seed) && InactiveSolidWalls[Seed] != nullptr)
 		{
-			InactiveSolidWalls[i]->SpawnWall();
-			ActiveSolidWalls.Add(InactiveSolidWalls[i]);
+			InactiveSolidWalls[Seed]->SpawnWall();
+			ActiveSolidWalls.Add(InactiveSolidWalls[Seed]);
 			InactiveSolidWalls.RemoveAt(Seed);
 		}
 	}
@@ -115,10 +115,10 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 			break;
 
 		int32 Seed = FMath::RandRange(0, InactiveBreakableWalls.Num() - 1);
-		if (InactiveBreakableWalls.IsValidIndex(i) && InactiveBreakableWalls[i] != nullptr)
+		if (InactiveBreakableWalls.IsValidIndex(Seed) && InactiveBreakableWalls[Seed] != nullptr)
 		{
-			InactiveBreakableWalls[i]->SpawnWall();
-			ActiveBreakableWalls.Add(InactiveBreakableWalls[i]);
+			InactiveBreakableWalls[Seed]->SpawnWall();
+			ActiveBreakableWalls.Add(InactiveBreakableWalls[Seed]);
 			InactiveBreakableWalls.RemoveAt(Seed);
 		}
 	}
@@ -129,10 +129,10 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 			break;
 
 		int32 Seed = FMath::RandRange(0, InactiveFruits.Num() - 1);
-		if (InactiveFruits.IsValidIndex(i) && InactiveFruits[i] != nullptr)
+		if (InactiveFruits.IsValidIndex(Seed) && InactiveFruits[Seed] != nullptr)
 		{
-			InactiveFruits[i]->SpawnFruit();
-			ActiveFruits.Add(InactiveFruits[i]);
+			InactiveFruits[Seed]->SpawnFruit();
+			ActiveFruits.Add(InactiveFruits[Seed]);
 			InactiveFruits.RemoveAt(Seed);
 		}
 	}
@@ -166,10 +166,9 @@ void ARhino_GJ2023GameMode::FruitRespawn(ARhino_Fruit* CollectedFruit)
 		InactiveFruits[Seed]->SpawnFruit();
 		ActiveFruits.Add(InactiveFruits[Seed]);
 		InactiveFruits.RemoveAt(Seed);
-
-		ActiveFruits.Remove(CollectedFruit);
-		InactiveFruits.Add(CollectedFruit);
 	}
+	ActiveFruits.Remove(CollectedFruit);
+	InactiveFruits.Add(CollectedFruit);
 }
 
 void ARhino_GJ2023GameMode::RequestWallDestroy(ARhino_BreakableWall* DestroyedWall)
