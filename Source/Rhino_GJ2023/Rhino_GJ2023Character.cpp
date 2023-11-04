@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -43,9 +44,24 @@ ARhino_GJ2023Character::ARhino_GJ2023Character()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	BoxCollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollisionComponent"));
+	BoxCollisionComponent->SetupAttachment(RootComponent);
+}
+
+void ARhino_GJ2023Character::BeginPlay()
+{
+	Super::BeginPlay();
+	BoxCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ARhino_GJ2023Character::OnBoxCollisionBeginOverlap);
 }
 
 void ARhino_GJ2023Character::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+}
+
+void ARhino_GJ2023Character:: OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+			int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Component Overlap"));
 }
