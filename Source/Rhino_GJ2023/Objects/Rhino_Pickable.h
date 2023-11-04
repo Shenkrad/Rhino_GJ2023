@@ -29,6 +29,8 @@ public:
 	virtual void SpawnPickable();
 	UFUNCTION(BlueprintCallable)
 	virtual void DeSpawnPickable();
+	UFUNCTION(BlueprintCallable)
+	virtual void CollectPickable();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

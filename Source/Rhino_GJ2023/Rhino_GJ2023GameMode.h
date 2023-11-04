@@ -10,6 +10,7 @@
 
 class ARhino_SolidWall;
 class ARhino_BreakableWall;
+class ARhino_Fruit;
 
 UCLASS(minimalapi)
 class ARhino_GJ2023GameMode : public AGameModeBase
@@ -39,9 +40,13 @@ protected:
 	UPROPERTY()
 	TArray<ARhino_BreakableWall*> ActiveBreakableWalls;
 	UPROPERTY()
+	TArray<ARhino_Fruit*> ActiveFruits;
+	UPROPERTY()
 	TArray<ARhino_SolidWall*> InactiveSolidWalls;
 	UPROPERTY()
 	TArray<ARhino_BreakableWall*> InactiveBreakableWalls;
+	UPROPERTY()
+	TArray<ARhino_Fruit*> InactiveFruits;
 	//TArray<ARhino_SolidWall*> Fruits;
 	virtual void BeginPlay() override;
 

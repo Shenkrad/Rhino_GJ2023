@@ -29,6 +29,8 @@ public:
 	virtual void SpawnWall();
 	UFUNCTION(BlueprintCallable)
 	virtual void DeSpawnWall();
+	UFUNCTION(BlueprintCallable)
+	void DestroyWall();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

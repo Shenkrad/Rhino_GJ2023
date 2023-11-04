@@ -25,3 +25,12 @@ void ARhino_Fruit::Tick(float DeltaTime)
 
 }
 
+void ARhino_Fruit::SpawnFruit()
+{
+	SpawnPickable();
+}
+
+void ARhino_Fruit::DeSpawnFruit()
+{
+	DeSpawnPickable();
+}

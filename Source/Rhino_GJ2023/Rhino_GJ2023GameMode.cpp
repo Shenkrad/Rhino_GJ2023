@@ -8,6 +8,7 @@
 
 #include "Objects/Rhino_BreakableWall.h"
 #include "Objects/Rhino_SolidWall.h"
+#include "Objects/Rhino_Fruit.h"
 
 ARhino_GJ2023GameMode::ARhino_GJ2023GameMode()
 {
@@ -42,6 +43,7 @@ void ARhino_GJ2023GameMode::ScanAllObjects()
 
 	InactiveSolidWalls.Empty();
 	InactiveBreakableWalls.Empty();
+	InactiveFruits.Empty();
 
 	TArray<AActor*> Generic;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARhino_SolidWall::StaticClass(), Generic);
@@ -71,7 +73,19 @@ void ARhino_GJ2023GameMode::ScanAllObjects()
 		}
 	}
 
-
+	Generic.Empty();
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARhino_Fruit::StaticClass(), Generic);
+	for (int i = 0; i < Generic.Num(); i++)
+	{
+		if (Generic.IsValidIndex(i) && Generic[i] != nullptr)
+		{
+			if (ARhino_Fruit* Fruit = Cast<ARhino_Fruit>(Generic[i]))
+			{
+				Fruit->DeSpawnFruit();
+				InactiveFruits.Add(Fruit);
+			}
+		}
+	}
 }
 
 void ARhino_GJ2023GameMode::RandomSpawnObjects()
@@ -79,6 +93,7 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 
 	ActiveSolidWalls.Empty();
 	ActiveBreakableWalls.Empty();
+	ActiveFruits.Empty();
 
 	for (int i = 0; i < NumberSolidWalls; i++)
 	{
@@ -105,6 +120,20 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 			InactiveBreakableWalls[i]->SpawnWall();
 			ActiveBreakableWalls.Add(InactiveBreakableWalls[i]);
 			InactiveBreakableWalls.RemoveAt(Seed);
+		}
+	}
+
+	for (int i = 0; i < NumberFruits; i++)
+	{
+		if (InactiveFruits.IsEmpty())
+			break;
+
+		int32 Seed = FMath::RandRange(0, InactiveFruits.Num() - 1);
+		if (InactiveFruits.IsValidIndex(i) && InactiveFruits[i] != nullptr)
+		{
+			InactiveFruits[i]->SpawnFruit();
+			ActiveFruits.Add(InactiveFruits[i]);
+			InactiveFruits.RemoveAt(Seed);
 		}
 	}
 }

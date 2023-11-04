@@ -52,3 +52,7 @@ void ARhino_GenericWall::DeSpawnWall()
 	}
 }
 
+void ARhino_GenericWall::DestroyWall()
+{
+	DeSpawnWall();
+}

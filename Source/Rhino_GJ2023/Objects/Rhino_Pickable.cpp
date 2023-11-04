@@ -2,6 +2,7 @@
 
 
 #include "Rhino_Pickable.h"
+#include "Rhino_GJ2023/Rhino_GJ2023GameMode.h"
 
 // Sets default values
 ARhino_Pickable::ARhino_Pickable()
@@ -37,7 +38,7 @@ void ARhino_Pickable::SpawnPickable()
 	{
 		Model->Activate();
 		Model->SetVisibility(true, true);
-		Model->SetCollisionProfileName(FName(TEXT("BlockAll")));
+		Model->SetCollisionProfileName(FName(TEXT("OverlapAll")));
 		
 	}
 }
@@ -50,5 +51,10 @@ void ARhino_Pickable::DeSpawnPickable()
 		Model->SetCollisionProfileName(FName(TEXT("NoCollision")));
 		Model->Deactivate();
 	}
+}
+
+void ARhino_Pickable::CollectPickable()
+{
+	DeSpawnPickable();
 }
 
