@@ -35,9 +35,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* SetDestinationClickAction;
 
-	/** Jump Input Action */
+	/* Dash Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	class UInputAction* SetDestinationTouchAction;
+	class UInputAction* DashAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement Settings", meta=(AllowPrivateAccess = "true"))
+	float DashLaunchVelocity = 3000.f;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -52,13 +55,11 @@ protected:
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
-	void OnTouchTriggered();
-	void OnTouchReleased();
+	void OnDashTriggered();
 
 private:
 	FVector CachedDestination;
 
-	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
 };
 
