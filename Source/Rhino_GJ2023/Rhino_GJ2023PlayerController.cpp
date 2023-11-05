@@ -49,8 +49,11 @@ void ARhino_GJ2023PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &ARhino_GJ2023PlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &ARhino_GJ2023PlayerController::OnSetDestinationReleased);
 
-		//Setup dash event
+		// Setup dash event
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ARhino_GJ2023PlayerController::OnDashTriggered);
+
+		// Setup keyboard movement events
+		EnhancedInputComponent->BindAction(KeyboardMovement, ETriggerEvent::Triggered, this, &ARhino_GJ2023PlayerController::CharacterMovement);
 	}
 }
 
@@ -119,4 +122,24 @@ void ARhino_GJ2023PlayerController::OnStopDashing()
 	if (ControlledCharacter == nullptr) return;
 
 	ControlledCharacter->SetIsDashing(false);
+}
+
+void ARhino_GJ2023PlayerController::CharacterMovement(const FInputActionValue &Value)
+{
+	const FVector2D MoveVector = Value.Get<FVector2D>();
+	const FRotator MoveRotation(0.f, GetControlRotation().Yaw, 0.f);
+
+	// If movement is left or right direction
+	if (MoveVector.X > 0.05f || MoveVector.X < -0.05f)
+	{
+		const FVector Direction = MoveRotation.RotateVector(FVector::RightVector);
+		ControlledCharacter->AddMovementInput(Direction, MoveVector.X);
+	}
+
+	// If movement is forward or backward direction
+	if (MoveVector.Y > 0.05f || MoveVector.Y < -0.05f)
+	{
+		const FVector Direction = MoveRotation.RotateVector(FVector::ForwardVector);
+		ControlledCharacter->AddMovementInput(Direction, MoveVector.Y);
+	}
 }

@@ -40,6 +40,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* DashAction;
 
+	// /* Keyboard Movement Input */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* KeyboardMovement;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement Settings", meta=(AllowPrivateAccess = "true"))
 	float DashLaunchVelocity = 3000.f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement Settings", meta=(AllowPrivateAccess = "true"))
@@ -59,6 +63,7 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void OnDashTriggered();
+	void CharacterMovement(const FInputActionValue &Value);
 
 private:
 	FVector CachedDestination;
