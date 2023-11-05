@@ -32,13 +32,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
 	
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	class UInputAction* SetDestinationClickAction;
+	// /** Jump Input Action */
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	// class UInputAction* SetDestinationClickAction;
 
 	/* Dash Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* DashAction;
+
+	// /* Keyboard Movement Input */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* KeyboardMovement;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement Settings", meta=(AllowPrivateAccess = "true"))
 	float DashLaunchVelocity = 3000.f;
@@ -47,7 +51,7 @@ public:
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
+	// uint32 bMoveToMouseCursor : 1;
 
 	virtual void SetupInputComponent() override;
 	
@@ -59,13 +63,14 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void OnDashTriggered();
+	void CharacterMovement(const FInputActionValue &Value);
 
 private:
-	FVector CachedDestination;
+	// FVector CachedDestination;
 	
 	FTimerHandle DashTimerHandle;
 
-	float FollowTime; // For how long it has been pressed
+	// float FollowTime; // For how long it has been pressed
 
 	UPROPERTY()
 	ARhino_GJ2023Character* ControlledCharacter;
