@@ -5,10 +5,14 @@
 #include "Rhino_GJ2023Character.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/Gameplaystatics.h"
+#include "Misc/Timespan.h"
+#include "Misc/Char.h"
 
 #include "Objects/Rhino_BreakableWall.h"
 #include "Objects/Rhino_SolidWall.h"
 #include "Objects/Rhino_Fruit.h"
+
+#include "UI/Rhino_HUD.h"
 
 ARhino_GJ2023GameMode::ARhino_GJ2023GameMode()
 {
@@ -36,6 +40,7 @@ void ARhino_GJ2023GameMode::BeginPlay()
 
 	ScanAllObjects();
 	RandomSpawnObjects();
+	InitializeTimer();
 }
 
 void ARhino_GJ2023GameMode::ScanAllObjects()
@@ -184,4 +189,57 @@ void ARhino_GJ2023GameMode::WallDestroy(ARhino_BreakableWall* DestroyedWall)
 	}
 	ActiveBreakableWalls.Remove(DestroyedWall);
 	InactiveBreakableWalls.Add(DestroyedWall);
+}
+
+void ARhino_GJ2023GameMode::InitializeTimer()
+{
+	if (HUD == nullptr)
+	{
+		HUD = Cast<ARhino_HUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	}
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ARhino_GJ2023GameMode::SetUITimer, 1.f, true);
+}
+
+void ARhino_GJ2023GameMode::SetUITimer()
+{
+	Time.Seconds += 1;
+	if (Time.Seconds >= 60)
+	{
+		Time.Seconds = 0;
+		Time.Minutes += 1;
+	}
+	if (Time.Minutes >= 60)
+	{
+		Time.Minutes = 0;
+		Time.Hours += 1;
+	}
+
+	if (HUD)
+	{
+		FString Seconds = FString::Printf(TEXT("%02i"), FMath::Abs(Time.Seconds));
+		FString Minutes = FString::Printf(TEXT("%02i"), FMath::Abs(Time.Minutes));
+		FString Hours = FString::Printf(TEXT("%02i"), FMath::Abs(Time.Hours));
+		FString Format = FString::Printf(TEXT("%s:%s:%s"), *Hours, *Minutes, *Seconds);
+		HUD->SetTimer(Format);
+	}
+}
+
+void ARhino_GJ2023GameMode::SetDashCountUI(int32 DashCount, int32 MaxCount)
+{
+	if (HUD)
+	{
+		FString Format = FString::Printf(TEXT("Dash: %02i/%02i"), FMath::Abs(DashCount), FMath::Abs(MaxCount));
+		HUD->SetDashCount(Format);
+	}
+}
+
+void ARhino_GJ2023GameMode::SetKillCountUI(int32 KillCount)
+{
+	if (HUD)
+	{
+		FString Format = FString::Printf(TEXT("Kills: %02i"), FMath::Abs(KillCount));
+		HUD->SetKillCount(Format);
+	}
 }

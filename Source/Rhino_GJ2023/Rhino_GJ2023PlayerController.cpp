@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Engine/LocalPlayer.h"
 
 #include "Rhino_GJ2023Character.h"
 
@@ -104,11 +105,13 @@ void ARhino_GJ2023PlayerController::OnDashTriggered()
 	FVector CharacterDirection = ControlledCharacter->GetActorForwardVector();
 	FVector LaunchVelocity = CharacterDirection * DashLaunchVelocity;
 
-	ControlledCharacter->SetIsDashing(true);
-	ControlledCharacter->LaunchCharacter(LaunchVelocity, false, false);
-
-	GetWorldTimerManager().SetTimer(DashTimerHandle, this, &ARhino_GJ2023PlayerController::OnStopDashing, DashWindow, false);
-	
+	if (ControlledCharacter->GetDashCount() > 0)
+	{
+		ControlledCharacter->SetIsDashing(true);
+		ControlledCharacter->LaunchCharacter(LaunchVelocity, false, false);
+		ControlledCharacter->UpdateDashCount(-1);
+		GetWorldTimerManager().SetTimer(DashTimerHandle, this, &ARhino_GJ2023PlayerController::OnStopDashing, DashWindow, false);
+	}	
 }
 
 void ARhino_GJ2023PlayerController::OnStopDashing()

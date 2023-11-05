@@ -11,9 +11,11 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Objects/Rhino_BreakableWall.h"
 #include "Objects/Rhino_Fruit.h"
+#include "Rhino_GJ2023GameMode.h"
 
 ARhino_GJ2023Character::ARhino_GJ2023Character()
 {
@@ -58,6 +60,17 @@ void ARhino_GJ2023Character::BeginPlay()
 
 	// Binding collision
 	BoxCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ARhino_GJ2023Character::OnBoxCollisionBeginOverlap);
+
+	//Get ref to GameMode
+	if (!GameMode)
+	{
+		GameMode = Cast<ARhino_GJ2023GameMode>(GetWorld()->GetAuthGameMode());
+	}
+
+	//Set DashCount to Max
+	UpdateDashCount(MaxDashCount);
+	//Set KillCount to 0
+	UpdateKillCount(0);
 }
 
 void ARhino_GJ2023Character::Tick(float DeltaSeconds)
@@ -80,10 +93,36 @@ void ARhino_GJ2023Character:: OnBoxCollisionBeginOverlap(UPrimitiveComponent* Ov
 	if (Fruit != nullptr)
 	{
 		Fruit->CollectFruit();
+		UpdateDashCount(1);
 	}
 }
 
 void ARhino_GJ2023Character::SetIsDashing(bool IsDashing)
 {
 	bIsDashing = IsDashing;
+}
+
+void ARhino_GJ2023Character::UpdateDashCount(int32 AddDash)
+{
+	if (DashCount + AddDash < 0)
+		return;
+	else if (DashCount + AddDash > MaxDashCount)
+		return;
+
+	DashCount += AddDash;
+	if (GameMode)
+	{
+		GameMode->SetDashCountUI(DashCount, MaxDashCount);
+	}
+}
+void ARhino_GJ2023Character::UpdateKillCount(int32 AddKill)
+{
+	if (KillCount + AddKill < 0)
+		return;
+
+	KillCount += AddKill;
+	if (GameMode)
+	{
+		GameMode->SetKillCountUI(KillCount);
+	}
 }

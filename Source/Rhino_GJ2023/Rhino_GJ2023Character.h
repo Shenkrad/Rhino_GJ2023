@@ -7,6 +7,7 @@
 #include "Rhino_GJ2023Character.generated.h"
 
 class UBoxComponent;
+class ARhino_GJ2023GameMode;
 
 UCLASS(Blueprintable)
 class ARhino_GJ2023Character : public ACharacter
@@ -28,8 +29,47 @@ public:
 
 	void SetIsDashing(bool IsDashing);
 
+	int32 GetDashCount() { return DashCount; };
+	int32 GetMaxDashCount() { return MaxDashCount; };
+	int32 GetMaxKillCount() { return KillCount; }
+
+	
+	void SetDashCount(int32 Count) { this->DashCount = Count; };
+	void SetKillCount(int32 Count) { this->KillCount = Count; };
+
+
+	/*
+	* Always use this to value check && update UI
+	* If Add value is negative, it subtracts
+	* Safe checks new value
+	*/
+	void UpdateDashCount(int32 AddDash);
+	/*
+	* Always use this to value check && update UI
+	* If Add value is negative, it subtracts
+	* Safe checks new value
+	*/
+	void UpdateKillCount(int32 AddKill);
+
 private:
+
+
+	/*DASH AND KILL MECHANICS VARIABLES*/
+	UPROPERTY()
 	bool bIsDashing = false;
+	UPROPERTY()
+	int32 DashCount = 0;
+	UPROPERTY(EditAnywhere, Category = "Dash Mechanic")
+	int32 MaxDashCount = 3;
+
+	UPROPERTY()
+	int32 KillCount = 0;
+
+	UPROPERTY()
+	ARhino_GJ2023GameMode* GameMode;
+
+
+
 
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

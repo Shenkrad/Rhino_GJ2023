@@ -11,7 +11,21 @@
 class ARhino_SolidWall;
 class ARhino_BreakableWall;
 class ARhino_Fruit;
+class ARhino_HUD;
 
+USTRUCT(BlueprintType)
+struct FTimeFormat
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+		int32 Seconds = 0;
+	UPROPERTY()
+		int32 Minutes = 0;
+	UPROPERTY()
+		int32 Hours = 0;
+};
 UCLASS(minimalapi)
 class ARhino_GJ2023GameMode : public AGameModeBase
 {
@@ -39,6 +53,12 @@ public:
 		void RequestWallDestroy(ARhino_BreakableWall* DestroyedWall);
 
 
+	UFUNCTION()
+		void SetDashCountUI(int32 DashCount, int32 MaxDashCount);
+	UFUNCTION()
+		void SetKillCountUI(int32 KillCount);
+
+
 protected:
 
 	UPROPERTY()
@@ -62,6 +82,17 @@ protected:
 
 	UFUNCTION()
 		void WallDestroy(ARhino_BreakableWall* DestroyedWall);
+
+
+	UFUNCTION()
+		void InitializeTimer();
+	UFUNCTION()
+		void SetUITimer();
+
+	FTimeFormat Time;
+
+	UPROPERTY()
+		ARhino_HUD* HUD;
 
 };
 
