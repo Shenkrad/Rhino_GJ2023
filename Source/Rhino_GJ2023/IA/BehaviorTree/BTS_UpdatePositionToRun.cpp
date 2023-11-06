@@ -4,7 +4,7 @@
 #include "BTS_UpdatePositionToRun.h"
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "AIController.h"
+#include "../Rhino_NPCAIController.h"
 
 UBTS_UpdatePositionToRun::UBTS_UpdatePositionToRun()
 {
@@ -25,17 +25,19 @@ void UBTS_UpdatePositionToRun::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 {
     Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
+    ARhino_NPCAIController* AIController = Cast<ARhino_NPCAIController>(OwnerComp.GetAIOwner());
+    if (AIController == nullptr) return;
+
     APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
     if (PlayerPawn == nullptr) return;
-    FVector AIPosition = OwnerComp.GetAIOwner()->GetPawn()->GetActorLocation();
+    
+    FVector AIPosition = AIController->GetPawn()->GetActorLocation();
     FVector PlayerPosition = PlayerPawn->GetActorLocation();
 
     FVector DirectionToPlayer = PlayerPosition - AIPosition;
     DirectionToPlayer.Normalize();
-
-    float DistanceToMove = 600.f;
-    FVector NewAIPosition = AIPosition -DirectionToPlayer * DistanceToMove;
-
+    
+    FVector NewAIPosition = AIPosition -DirectionToPlayer * AIController->DistanceToMove;
 
     OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewAIPosition);
 }

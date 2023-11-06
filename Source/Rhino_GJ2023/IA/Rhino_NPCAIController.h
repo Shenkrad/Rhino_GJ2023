@@ -15,6 +15,10 @@ class RHINO_GJ2023_API ARhino_NPCAIController : public AAIController
 	GENERATED_BODY()
 
 public:
+	// Distance to move when the AI character sees the player
+	UPROPERTY(EditDefaultsOnly, Category = "AI Behavior")
+	float DistanceToMove = 200.f;
+
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
