@@ -10,6 +10,7 @@
 
 #include "Objects/Rhino_BreakableWall.h"
 #include "Objects/Rhino_SolidWall.h"
+#include "Objects/Rhino_Door.h"
 #include "Objects/Rhino_Fruit.h"
 
 #include "UI/Rhino_HUD.h"
@@ -49,6 +50,7 @@ void ARhino_GJ2023GameMode::ScanAllObjects()
 	InactiveSolidWalls.Empty();
 	InactiveBreakableWalls.Empty();
 	InactiveFruits.Empty();
+	InactiveDoors.Empty();
 
 	TArray<AActor*> Generic;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARhino_SolidWall::StaticClass(), Generic);
@@ -91,6 +93,20 @@ void ARhino_GJ2023GameMode::ScanAllObjects()
 			}
 		}
 	}
+
+	Generic.Empty();
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARhino_Door::StaticClass(), Generic);
+	for (int i = 0; i < Generic.Num(); i++)
+	{
+		if (Generic.IsValidIndex(i) && Generic[i] != nullptr)
+		{
+			if (ARhino_Door* Door = Cast<ARhino_Door>(Generic[i]))
+			{
+				Door->DeSpawnDoor();
+				InactiveDoors.Add(Door);
+			}
+		}
+	}
 }
 
 void ARhino_GJ2023GameMode::RandomSpawnObjects()
@@ -99,6 +115,7 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 	ActiveSolidWalls.Empty();
 	ActiveBreakableWalls.Empty();
 	ActiveFruits.Empty();
+	ActiveDoors.Empty();
 
 	for (int i = 0; i < NumberSolidWalls; i++)
 	{
@@ -139,6 +156,20 @@ void ARhino_GJ2023GameMode::RandomSpawnObjects()
 			InactiveFruits[Seed]->SpawnFruit();
 			ActiveFruits.Add(InactiveFruits[Seed]);
 			InactiveFruits.RemoveAt(Seed);
+		}
+	}
+
+	for (int i = 0; i < NumberDoors; i++)
+	{
+		if (InactiveDoors.IsEmpty())
+			break;
+
+		int32 Seed = FMath::RandRange(0, InactiveDoors.Num() - 1);
+		if (InactiveDoors.IsValidIndex(Seed) && InactiveDoors[Seed] != nullptr)
+		{
+			InactiveDoors[Seed]->SpawnDoor();
+			ActiveDoors.Add(InactiveDoors[Seed]);
+			InactiveDoors.RemoveAt(Seed);
 		}
 	}
 }
@@ -242,4 +273,21 @@ void ARhino_GJ2023GameMode::SetKillCountUI(int32 KillCount)
 		FString Format = FString::Printf(TEXT("Kills: %02i"), FMath::Abs(KillCount));
 		HUD->SetKillCount(Format);
 	}
+}
+
+void ARhino_GJ2023GameMode::Check_WinCondition(ARhino_Door* RequestingDoor)
+{
+	for (int i = 0; i < ActiveDoors.Num(); i++)
+	{
+		if (ActiveDoors.IsValidIndex(i) && ActiveDoors[i])
+		{
+			if (ActiveDoors[i] == RequestingDoor)
+				Init_GameWin();
+		}
+	}
+}
+
+void ARhino_GJ2023GameMode::Init_GameWin()
+{
+	ResetLevel();
 }
