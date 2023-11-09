@@ -11,6 +11,7 @@
 class ARhino_SolidWall;
 class ARhino_BreakableWall;
 class ARhino_Fruit;
+class ARhino_Door;
 class ARhino_HUD;
 
 USTRUCT(BlueprintType)
@@ -39,6 +40,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "MazeSpawn Options")
 		int32 NumberBreakableWalls = 5;
 	UPROPERTY(EditAnywhere, Category = "MazeSpawn Options")
+		int32 NumberDoors = 1;
+	UPROPERTY(EditAnywhere, Category = "MazeSpawn Options")
 		int32 NumberFruits = 5;
 	UPROPERTY(EditAnywhere, Category = "Fruits Options")
 		float FruitTimeToRespawn = 2.5f;
@@ -58,6 +61,11 @@ public:
 	UFUNCTION()
 		void SetKillCountUI(int32 KillCount);
 
+	UFUNCTION(BlueprintCallable)
+		void Check_WinCondition(ARhino_Door* RequestingDoor);
+	UFUNCTION()
+		void Init_GameWin();
+
 
 protected:
 
@@ -68,11 +76,15 @@ protected:
 	UPROPERTY()
 	TArray<ARhino_Fruit*> ActiveFruits;
 	UPROPERTY()
+	TArray<ARhino_Door*> ActiveDoors;
+	UPROPERTY()
 	TArray<ARhino_SolidWall*> InactiveSolidWalls;
 	UPROPERTY()
 	TArray<ARhino_BreakableWall*> InactiveBreakableWalls;
 	UPROPERTY()
 	TArray<ARhino_Fruit*> InactiveFruits;
+	UPROPERTY()
+	TArray<ARhino_Door*> InactiveDoors;
 
 
 	virtual void BeginPlay() override;
