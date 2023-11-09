@@ -28,9 +28,6 @@ public:
 	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(EditAnywhere,Category = "Mesh")
-	TArray<UStaticMesh*> Fruits;
-
 	UFUNCTION()
 	void SpawnFruit();
 	UFUNCTION()

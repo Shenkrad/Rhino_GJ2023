@@ -25,6 +25,10 @@ public:
 	UPROPERTY()
 	UStaticMeshComponent* Model;
 
+
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	TArray<UStaticMesh*> Pickables;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void SpawnPickable();
 	UFUNCTION(BlueprintCallable)

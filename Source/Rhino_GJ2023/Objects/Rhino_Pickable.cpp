@@ -39,7 +39,13 @@ void ARhino_Pickable::SpawnPickable()
 		Model->Activate();
 		Model->SetVisibility(true, true);
 		Model->SetCollisionProfileName(FName(TEXT("OverlapAll")));
-		
+
+		int32 Seed = FMath::RandRange(0, Pickables.Num() - 1);
+		if (Pickables.IsValidIndex(Seed) && Pickables[Seed])
+		{
+			if (Model)
+				Model->SetStaticMesh(Pickables[Seed]);
+		}
 	}
 }
 
