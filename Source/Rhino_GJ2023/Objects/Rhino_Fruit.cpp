@@ -20,12 +20,6 @@ void ARhino_Fruit::BeginPlay()
 	if (Mesh == nullptr)
 	{
 		Mesh = FindComponentByClass<UStaticMeshComponent>();
-
-		int32 Seed = FMath::RandRange(0, Fruits.Num());
-		if (Fruits.IsValidIndex(Seed) && Fruits[Seed])
-		{
-			Mesh->SetStaticMesh(Fruits[Seed]);
-		}
 	}
 }
 
@@ -39,6 +33,12 @@ void ARhino_Fruit::Tick(float DeltaTime)
 void ARhino_Fruit::SpawnFruit()
 {
 	SpawnPickable();
+	int32 Seed = FMath::RandRange(0, Fruits.Num());
+	if (Fruits.IsValidIndex(Seed) && Fruits[Seed])
+	{
+		if (Mesh)
+			Mesh->SetStaticMesh(Fruits[Seed]);
+	}
 }
 
 void ARhino_Fruit::DeSpawnFruit()
