@@ -4,39 +4,34 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
-#include "Rhino_Pickable.h"
-
-#include "Rhino_Fruit.generated.h"
-
+#include "Rhino_Door.generated.h"
 
 UCLASS()
-class RHINO_GJ2023_API ARhino_Fruit : public ARhino_Pickable
+class RHINO_GJ2023_API ARhino_Door : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
 	// Sets default values for this actor's properties
-	ARhino_Fruit();
+	ARhino_Door();
 
 protected:
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
 
 	UPROPERTY()
-	UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* Model;
 
-	UPROPERTY(EditAnywhere,Category = "Mesh")
-	TArray<UStaticMesh*> Fruits;
-
-	UFUNCTION()
-	void SpawnFruit();
-	UFUNCTION()
-	void DeSpawnFruit();
 	UFUNCTION(BlueprintCallable)
-	void CollectFruit();
+	virtual void SpawnDoor();
+	UFUNCTION(BlueprintCallable)
+	virtual void DeSpawnDoor();
+	UFUNCTION(BlueprintCallable)
+	virtual void Request_WinCheck();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

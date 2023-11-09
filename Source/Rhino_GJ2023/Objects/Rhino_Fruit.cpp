@@ -16,7 +16,17 @@ ARhino_Fruit::ARhino_Fruit()
 void ARhino_Fruit::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (Mesh == nullptr)
+	{
+		Mesh = FindComponentByClass<UStaticMeshComponent>();
+
+		int32 Seed = FMath::RandRange(0, Fruits.Num());
+		if (Fruits.IsValidIndex(Seed) && Fruits[Seed])
+		{
+			Mesh->SetStaticMesh(Fruits[Seed]);
+		}
+	}
 }
 
 // Called every frame
