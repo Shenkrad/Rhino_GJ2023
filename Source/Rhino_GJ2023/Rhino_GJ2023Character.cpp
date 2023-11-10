@@ -15,6 +15,7 @@
 
 #include "Objects/Rhino_BreakableWall.h"
 #include "Objects/Rhino_Fruit.h"
+#include "Objects/Rhino_Door.h"
 #include "Rhino_GJ2023GameMode.h"
 
 ARhino_GJ2023Character::ARhino_GJ2023Character()
@@ -94,6 +95,12 @@ void ARhino_GJ2023Character:: OnBoxCollisionBeginOverlap(UPrimitiveComponent* Ov
 	{
 		Fruit->CollectFruit();
 		UpdateDashCount(1);
+	}
+
+	ARhino_Door* Door = Cast<ARhino_Door>(OtherActor);
+	if (Door != nullptr)
+	{
+		Door->Request_WinCheck();
 	}
 }
 

@@ -16,7 +16,11 @@ ARhino_Fruit::ARhino_Fruit()
 void ARhino_Fruit::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (Mesh == nullptr)
+	{
+		Mesh = FindComponentByClass<UStaticMeshComponent>();
+	}
 }
 
 // Called every frame

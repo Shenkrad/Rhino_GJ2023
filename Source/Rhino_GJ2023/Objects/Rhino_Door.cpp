@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Rhino_Pickable.h"
-
+#include "Rhino_Door.h"
+#include "Rhino_GJ2023/Rhino_GJ2023GameMode.h"
 
 // Sets default values
-ARhino_Pickable::ARhino_Pickable()
+ARhino_Door::ARhino_Door()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -13,7 +13,7 @@ ARhino_Pickable::ARhino_Pickable()
 }
 
 // Called when the game starts or when spawned
-void ARhino_Pickable::BeginPlay()
+void ARhino_Door::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -21,35 +21,28 @@ void ARhino_Pickable::BeginPlay()
 	{
 		Model = FindComponentByClass<UStaticMeshComponent>();
 	}
-	
-	DeSpawnPickable();
+	DeSpawnDoor();
 }
 
 // Called every frame
-void ARhino_Pickable::Tick(float DeltaTime)
+void ARhino_Door::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void ARhino_Pickable::SpawnPickable()
+void ARhino_Door::SpawnDoor()
 {
 	if (Model)
 	{
 		Model->Activate();
 		Model->SetVisibility(true, true);
-		Model->SetCollisionProfileName(FName(TEXT("OverlapAll")));
-
-		int32 Seed = FMath::RandRange(0, Pickables.Num() - 1);
-		if (Pickables.IsValidIndex(Seed) && Pickables[Seed])
-		{
-			if (Model)
-				Model->SetStaticMesh(Pickables[Seed]);
-		}
+		Model->SetCollisionProfileName(FName(TEXT("BlockAll")));
+		
 	}
 }
 
-void ARhino_Pickable::DeSpawnPickable()
+void ARhino_Door::DeSpawnDoor()
 {
 	if (Model)
 	{
@@ -59,8 +52,10 @@ void ARhino_Pickable::DeSpawnPickable()
 	}
 }
 
-void ARhino_Pickable::CollectPickable()
+void ARhino_Door::Request_WinCheck()
 {
-	
+	if (ARhino_GJ2023GameMode* GameMode = Cast<ARhino_GJ2023GameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		GameMode->Check_WinCondition(this);
+	}
 }
-
