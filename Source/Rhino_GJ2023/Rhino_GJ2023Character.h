@@ -27,6 +27,9 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void TriggerDashAnimation();
+
 	void SetIsDashing(bool IsDashing);
 
 	int32 GetDashCount() { return DashCount; };
@@ -67,8 +70,6 @@ private:
 
 	UPROPERTY()
 	ARhino_GJ2023GameMode* GameMode;
-
-
 
 
 	/** Top down camera */

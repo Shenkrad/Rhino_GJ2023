@@ -111,6 +111,7 @@ void ARhino_GJ2023PlayerController::OnDashTriggered()
 	if (ControlledCharacter->GetDashCount() > 0)
 	{
 		ControlledCharacter->SetIsDashing(true);
+		ControlledCharacter->TriggerDashAnimation();
 		ControlledCharacter->LaunchCharacter(LaunchVelocity, false, false);
 		ControlledCharacter->UpdateDashCount(-1);
 		GetWorldTimerManager().SetTimer(DashTimerHandle, this, &ARhino_GJ2023PlayerController::OnStopDashing, DashWindow, false);
