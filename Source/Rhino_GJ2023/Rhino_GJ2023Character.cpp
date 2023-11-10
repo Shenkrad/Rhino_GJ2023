@@ -109,6 +109,11 @@ void ARhino_GJ2023Character::SetIsDashing(bool IsDashing)
 	bIsDashing = IsDashing;
 }
 
+bool ARhino_GJ2023Character::GetIsDashing() const
+{
+	return bIsDashing;
+}
+
 void ARhino_GJ2023Character::UpdateDashCount(int32 AddDash)
 {
 	if (DashCount + AddDash < 0)

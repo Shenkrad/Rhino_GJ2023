@@ -31,6 +31,7 @@ public:
 	void TriggerDashAnimation();
 
 	void SetIsDashing(bool IsDashing);
+	bool GetIsDashing() const;
 
 	int32 GetDashCount() { return DashCount; };
 	int32 GetMaxDashCount() { return MaxDashCount; };

@@ -3,6 +3,9 @@
 
 #include "Rhino_NPCCharacter.h"
 
+#include "Components/CapsuleComponent.h"
+#include "../Rhino_GJ2023Character.h"
+
 // Sets default values
 ARhino_NPCCharacter::ARhino_NPCCharacter()
 {
@@ -15,6 +18,8 @@ ARhino_NPCCharacter::ARhino_NPCCharacter()
 void ARhino_NPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ARhino_NPCCharacter::OnCapsuleHit);
 	
 }
 
@@ -30,5 +35,25 @@ void ARhino_NPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+// Called when Capsule Component hits
+void ARhino_NPCCharacter::OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	ARhino_GJ2023Character* MainCharacter = Cast<ARhino_GJ2023Character>(OtherActor);
+	if (MainCharacter == nullptr) return;
+
+	Die(MainCharacter);
+}
+
+void ARhino_NPCCharacter::Die(ARhino_GJ2023Character* MainCharacter)
+{	
+	if (MainCharacter->GetIsDashing())
+	{
+		GetMesh()->SetSimulatePhysics(true);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DetachFromControllerPendingDestroy();
+	}
 }
 
